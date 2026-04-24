@@ -1,0 +1,29 @@
+
+# DBT
+brz_ecommerce_backend/target/
+brz_ecommerce_backend/dbt_packages/
+brz_ecommerce_backend/logs/
+
+# Python virtual environment
+myvenv/
+venv/
+.venv/
+env/
+ENV/
+
+# Data
+data/duckdb/*.duckdb
+data/raw/**/*.csv
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code 
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
