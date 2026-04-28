@@ -1,0 +1,28 @@
+on:
+  pull_request:
+    branches: [develop, main]  # triggers on every PR opened towards develop or main
+                               # never push directly to main — always go through a PR
+
+jobs:
+  dbt-ci:                      # name of the GitHub Actions job
+    runs-on: ubuntu-latest     # GitHub spins up a fresh Linux virtual machine
+
+    steps:
+      - uses: actions/checkout@v3       # downloads the repository code onto the virtual machine
+
+      - name: Install dependencies
+        run: pip install dbt-duckdb     # installs dbt on the virtual machine
+
+      - name: Run dbt
+        run: dbt build $DBT_SELECT --target test  # runs dbt against the test environment
+        env:
+          DBT_SELECT: >-
+            ${{ github.base_ref == 'main'
+              && ''
+              || '--select state:modified+'
+            }}
+          # if PR targets main → dbt build (full project)
+          # if PR targets develop → dbt build --select <modified model> (only the modified model)
+          # NOTE: '--select state:modified+' is a simplification — the correct approach
+          # uses state:modified+ which compares against the previous manifest.json.
+          # This will be covered in the Slim CI chapter.
