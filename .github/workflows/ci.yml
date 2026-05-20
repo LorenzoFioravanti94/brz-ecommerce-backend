@@ -92,6 +92,15 @@ jobs:
             exit 1
           fi
 
+      - name: Debug state modified
+        if: github.base_ref == 'develop'
+        run: |
+          dbt ls \
+            --select "state:modified+" \
+            --state ${{ github.workspace }}/persistent_state \
+            --target test \
+            --project-dir brz_ecommerce_backend
+
       - name: Run dbt (Slim CI — PR towards develop)
         if: github.base_ref == 'develop'
         run: |
